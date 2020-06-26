@@ -1,2 +1,6 @@
 # IDE artifacts
 *.swp
+.DS_Store
+
+# node stuffs
+node_modules/

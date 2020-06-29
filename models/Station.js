@@ -1,14 +1,16 @@
 const dynamoose = require("dynamoose");
 
 const StationSchema = new dynamoose.Schema({
-   "id": String,
+   "id": {
+      "type": String,
+      "required": true,
+   },
    "title": {
       "type": String,
       "required": true,
    },
    "description": {
       "type": String,
-      "required": true,
    },
    "groupings": {
       "type": Array,

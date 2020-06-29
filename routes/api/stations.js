@@ -1,46 +1,57 @@
 const express = require('express');
 const router = express.Router();
+const shortid = require("shortid");
 
 const Station = require('../../models/Station');
 
-// router.get('/test', (req, res) => res.send('station route testing!'));
-
-// GET “/” - home
-// POST “/station/:id” - add station
-// DELETE “/station/:id” - delete station
+// GET “/station/” - get all stations
+// POST “/station/” - add station
+// DELETE “/station/” - delete station
 // GET “/station/:id” - get station id
-// POST “/station/:id/item” - add item
+// POST “/station/:id” - add item
 
 router.get('/', async (req, res) => {
    try {
-     await Book.scan().exec(function (err, response) {
-        if(err) {
-           console.log(err);
-        }
-        else {
-           res.jsonp(response);
-        }
-     });
-  }
-  catch (err) {
-     console.log(err);
-  }
+      await Station.scan().exec(function(err, response) {
+         if (err) console.log(err);
+         else res.jsonp(response);
+      });
+   } catch (err) {
+      console.log(err);
+   }
 });
 
-router.post('/station/:id', async (req, res) => {
+router.post('/', async (req, res) => {
+   const newStation = new Station({
+      id: shortid.generate(), 
+      title: req.body.stationName,
+   });
 
+   await newStation.save((err, item) => {
+      if (err) console.log(err);
+      else console.log(newStation.id);
+   });
+   res.redirect(newStation.id); // may want to change this? 
 });
 
-router.delete('/station/:id', async (req, res) => {
-
+router.delete('/', async (req, res) => {
+   Station.get(req.body.stationID).delete((err) => {
+      if (err) console.log(err);
+   });
+   res.redirect('/'); // may want to change this?
 });
 
-router.get('/station/:id', async (req, res) => {
-
+router.get('/:id', async (req, res) => {
+   Station.query("id").eq(req.params.id).exec((err, results) => {
+      if (err) console.log(err);
+      else {
+         res.jsonp(results);
+      }
+   });
 });
 
-router.post('/station/:id/item', async (req, res) => {
-
+router.post('/:id', async (req, res) => {
+   // TODO - waiting for react frontend
 });
 
 module.exports = router;

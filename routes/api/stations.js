@@ -4,12 +4,6 @@ const shortid = require("shortid");
 
 const Station = require('../../models/Station');
 
-// GET “/station/” - get all stations
-// POST “/station/” - add station
-// DELETE “/station/” - delete station
-// GET “/station/:id” - get station id
-// POST “/station/:id” - add item
-
 router.get('/', async (req, res) => {
    try {
       await Station.scan().exec(function(err, response) {
@@ -22,36 +16,38 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-   const newStation = new Station({
+   const stationInfo = {
       id: shortid.generate(), 
       title: req.body.stationName,
-   });
+   };
+
+   const newStation = new Station(stationInfo);
 
    await newStation.save((err, item) => {
       if (err) console.log(err);
-      else console.log(newStation.id);
    });
-   res.redirect(newStation.id); // may want to change this? 
+   res.jsonp(stationInfo);
 });
 
 router.delete('/', async (req, res) => {
-   Station.get(req.body.stationID).delete((err) => {
-      if (err) console.log(err);
-   });
-   res.redirect('/'); // may want to change this?
+   try {
+      await Station.delete(req.body.stationID);
+   } catch (err) {
+      console.log(err);
+   }
+   res.end();
 });
 
 router.get('/:id', async (req, res) => {
    Station.query("id").eq(req.params.id).exec((err, results) => {
       if (err) console.log(err);
-      else {
-         res.jsonp(results);
-      }
+      else if (results.length === 0) res.jsonp({"error": "station not found"});
+      else res.jsonp(results[0]);
    });
 });
 
 router.post('/:id', async (req, res) => {
-   // TODO - waiting for react frontend
+   // TODO - waiting for new station model
 });
 
 module.exports = router;

@@ -1,4 +1,8 @@
 const dynamoose = require('dynamoose');
+const config = require('config');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const db = new dynamoose.aws.sdk.DynamoDB({
    "accessKeyId": process.env.AWS_ACCESS_KEY_ID,

@@ -1,4 +1,5 @@
 const dynamoose = require("dynamoose");
+const Grouping = require('./Grouping');
 
 const StationSchema = new dynamoose.Schema({
    "id": {
@@ -12,26 +13,15 @@ const StationSchema = new dynamoose.Schema({
    "description": {
       "type": String,
    },
+   "number": {
+      "type": Number,
+   },
+   "level": {
+      "type": Number,
+   },
    "groupings": {
       "type": Array,
-      "schema": [{
-         "type": Object,
-         // schema for a single grouping
-         "schema": {
-            "title": String,
-            "items": {
-               "type": Array,
-               "schema": [{
-                  "type": Object,
-                  // schema for a single item
-                  "schema": {
-                     "title": String,
-                     "required": Boolean,
-                  }
-               }]
-            }
-         }
-      }]
+      "schema": [Grouping],
    }
 });
 

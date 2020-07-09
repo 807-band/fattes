@@ -1,27 +1,35 @@
 const dynamoose = require("dynamoose");
-const Grouping = require('./Grouping');
 
 const StationSchema = new dynamoose.Schema({
-   "id": {
-      "type": String,
-      "required": true,
-   },
-   "title": {
-      "type": String,
-      "required": true,
-   },
-   "description": {
-      "type": String,
-   },
-   "number": {
-      "type": Number,
-   },
-   "level": {
-      "type": Number,
-   },
+   "id": { "type": String, "required": true },
+   "title": { "type": String, "required": true },
+   "description": String,
+   "order": Number,
+   "rank": Number,
    "groupings": {
       "type": Array,
-      "schema": [Grouping],
+      "schema": [{
+         "type": Object,
+         "schema": {
+            // groupings
+            "id": { "type": String, "required": true },
+            "title": { "type": String, "required": true },
+            "order": Number,
+            "items": {
+               "type": Array,
+               "schema": [{
+                  "type": Object,
+                  "schema": {
+                     // items
+                     "id": { "type": String, "required": true },
+                     "title": { "type": String, "required": true },
+                     "isRequired": Boolean,
+                     "order": Number
+                  }
+               }]
+            }
+         }
+      }]
    }
 });
 

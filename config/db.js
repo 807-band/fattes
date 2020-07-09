@@ -1,8 +1,5 @@
 const dynamoose = require('dynamoose');
-const config = require('config');
-const dotenv = require('dotenv');
-
-dotenv.config();
+require('dotenv').config();
 
 const db = new dynamoose.aws.sdk.DynamoDB({
    "accessKeyId": process.env.AWS_ACCESS_KEY_ID,
@@ -15,6 +12,7 @@ const connectToDB = async () => {
       dynamoose.aws.ddb.set(db);
       console.log("Connected to DynamoDB");
    } catch (err) {
+      console.log("connection error");
       console.log(err);
    }
 };

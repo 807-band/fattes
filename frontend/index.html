@@ -2,7 +2,7 @@
    <h2>Add Station</h2>
    <form action="/api/station/" method="POST" enctype="application/x-www-form-urlencoded">
       <label for="stationName">Station Name</label>
-      <input type="text" name="stationName" />
+      <input type="text" name="title" />
       <input type="submit" value="Create" />
    </form>
 
@@ -10,7 +10,7 @@
    <p>note: HTML does not support DELETE method, so this will not work</p>
    <form action="/api/station/" method="DELETE" enctype="application/x-www-form-urlencoded">
       <label for="stationID">Station ID</label>
-      <input type="text" name="stationID" />
+      <input type="text" name="id" />
       <input type="submit" value="Delete" />
    </form>
 

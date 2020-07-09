@@ -7,7 +7,7 @@ const router = express.Router();
 
 const connectToDB = require('./config/db.js');
 
-const stationRoutes = require('./routes/api/stations.js');
+const stationRoutes = require('./routes/stations.js');
 
 router.get('/', (req, res) => {
    res.sendFile(path.join(__dirname+'/frontend/index.html'));

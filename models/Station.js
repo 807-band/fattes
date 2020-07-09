@@ -33,4 +33,4 @@ const StationSchema = new dynamoose.Schema({
    }
 });
 
-module.exports = Station = dynamoose.model('station', StationSchema);
+module.exports = Station = dynamoose.model(process.env.ENVIRONMENT + "-station" , StationSchema);

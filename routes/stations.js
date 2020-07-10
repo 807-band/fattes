@@ -2,18 +2,34 @@ const express = require('express');
 const router = express.Router();
 const stations = require("../controllers/stations");
 
+/**
+ * General station operations
+ */
+
 router.get('/', stations.getAll);
+router.post('/', stations.create);
 
-router.post('/', stations.post);
-
-router.delete('/', stations.delete);
+/**
+ * Station specific operations
+ */
 
 router.get('/:id', stations.getById);
+router.put('/:id', stations.updateStation);
+router.delete('/:id', stations.delete);
 
-router.put('/:id', stations.putById);
+/**
+ * Grouping operations
+ */
 
-router.post('/:id', stations.postGrouping);
+router.post('/:id', stations.createGrouping);
+router.put('/:sid/:gid', stations.updateGrouping);
+router.delete('/:sid/:gid', stations.deleteGrouping);
 
-router.delete('/:id', stations.deleteGrouping);
+/**
+ * Item operations
+ */
+router.post('/:sid/:gid/', stations.createItem);
+router.put('/:sid/:gid/:iid', stations.updateItem);
+router.delete('/:sid/:gid/:iid', stations.deleteItem);
 
 module.exports = router;

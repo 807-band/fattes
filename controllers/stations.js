@@ -20,6 +20,9 @@ module.exports.create = async (req, res) => {
    const stationInfo = {
       id: shortid.generate(), 
       title: req.body.title,
+      description: req.body.description,
+      rank: req.body.rank,
+      order: req.body.order,
    };
 
    const newStation = new Station(stationInfo);
@@ -41,6 +44,7 @@ module.exports.getById = async (req, res) => {
    });
 }
 
+//TODO: I probably broke this when I changed rank to String, make sure it works soon
 module.exports.updateStation = async (req, res) => {
    try {
       let station = await Station.get(req.params.id);

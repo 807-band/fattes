@@ -4,8 +4,8 @@ const StationSchema = new dynamoose.Schema({
    "id": { "type": String, "required": true },
    "title": { "type": String, "required": true },
    "description": String,
+   "rank": String,
    "order": Number,
-   "rank": Number,
    "groupings": {
       "type": Array,
       "schema": [{

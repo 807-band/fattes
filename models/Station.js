@@ -30,6 +30,18 @@ const StationSchema = new dynamoose.Schema({
             }
          }
       }]
+   },
+   "information": {
+      "type": Array,
+      "schema": [{
+         "type": Object,
+         "schema": {
+            "id": { "type": String, "required": true },
+            "role": String,
+            "info": String,
+            "text": String
+         }
+      }]
    }
 });
 

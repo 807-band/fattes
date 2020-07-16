@@ -17,12 +17,35 @@ module.exports.getAll = async (req, res) => {
 }
 
 module.exports.create = async (req, res) => {
+   const infoSection = [{
+         id: shortid.generate(),
+         role: "instructor",
+         info: "setup"
+      },
+      {
+         id: shortid.generate(),
+         role: "instructor",
+         info: "script"
+      },
+      {
+         id: shortid.generate(),
+         role: "evaluator",
+         info: "setup"
+      },
+      {
+         id: shortid.generate(),
+         role: "evaluator",
+         info: "script"
+      }
+   ]
+      
    const stationInfo = {
       id: shortid.generate(), 
       title: req.body.title,
       description: req.body.description,
       rank: req.body.rank,
       order: req.body.order,
+      information: infoSection
    };
 
    const newStation = new Station(stationInfo);
@@ -44,14 +67,13 @@ module.exports.getById = async (req, res) => {
    });
 }
 
-//TODO: I probably broke this when I changed rank to String, make sure it works soon
 module.exports.updateStation = async (req, res) => {
    try {
       let station = await Station.get(req.params.id);
       if (station === undefined) return res.jsonp({"error": "station not found"});
 
       for (let item in req.body) {
-         if (item === "order" || item === "rank") req.body[item] = Number(req.body[item]);
+         if (item === "order") req.body[item] = Number(req.body[item]);
          station[item] = req.body[item];
       }
 
@@ -196,6 +218,7 @@ module.exports.updateItem = async (req, res) => {
       console.log(err);
    }
 }
+
 module.exports.deleteItem = async (req, res) => {
    try {
       let station = await Station.get(req.params.sid);
@@ -210,6 +233,29 @@ module.exports.deleteItem = async (req, res) => {
       delete station.groupings[group].items[item];
       await station.save((err, item) => {
          if (err) console.log(err);
+      });
+   } catch (err) {
+      console.log(err);
+   }
+}
+
+/**
+ * Item operations
+ */
+
+module.exports.updateInfo = async (req, res) => {
+   try {
+      let station = await Station.get(req.params.sid);
+      if (station === undefined) return res.jsonp({"error": "station not found"});
+
+      const infoIndex = station.information.findIndex(i => i.id === req.params.iid);
+      if (infoIndex === -1) return res.jsonp({"error": "information group not found"});
+
+      station.information[infoIndex].text = req.body["text"];
+
+      await station.save((err, item) => {
+         if (err) console.log(err);
+         res.jsonp(item);
       });
    } catch (err) {
       console.log(err);

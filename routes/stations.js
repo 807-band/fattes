@@ -18,6 +18,12 @@ router.put('/:id', stations.updateStation);
 router.delete('/:id', stations.delete);
 
 /**
+ * Information operations
+ */
+
+router.put('/:sid/info/:iid', stations.updateInfo);
+
+/**
  * Grouping operations
  */
 
@@ -28,6 +34,7 @@ router.delete('/:sid/:gid', stations.deleteGrouping);
 /**
  * Item operations
  */
+
 router.post('/:sid/:gid/', stations.createItem);
 router.put('/:sid/:gid/:iid', stations.updateItem);
 router.delete('/:sid/:gid/:iid', stations.deleteItem);

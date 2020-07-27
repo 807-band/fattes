@@ -3,40 +3,40 @@ const router = express.Router();
 const stations = require("../controllers/stations");
 
 /**
- * General station operations
+ * Admin operations
  */
 
-router.get('/', stations.getAll);
-router.post('/', stations.create);
+router.post('/', stations.admin.create);
+router.put('/:id', stations.admin.updateStation);
+router.delete('/:id', stations.admin.delete);
 
 /**
- * Station specific operations
+ * Selectors
  */
 
-router.get('/:id', stations.getById);
-router.put('/:id', stations.updateStation);
-router.delete('/:id', stations.delete);
+router.get('/', stations.selector.getAll);
+router.get('/:id', stations.selector.getById);
 
 /**
  * Information operations
  */
 
-router.put('/:sid/info/:iid', stations.updateInfo);
+router.put('/:sid/info/:iid', stations.info.updateInfo);
 
 /**
  * Grouping operations
  */
 
-router.post('/:id', stations.createGrouping);
-router.put('/:sid/:gid', stations.updateGrouping);
-router.delete('/:sid/:gid', stations.deleteGrouping);
+router.post('/:id', stations.grouping.createGrouping);
+router.put('/:sid/:gid', stations.grouping.updateGrouping);
+router.delete('/:sid/:gid', stations.grouping.deleteGrouping);
 
 /**
  * Item operations
  */
 
-router.post('/:sid/:gid/', stations.createItem);
-router.put('/:sid/:gid/:iid', stations.updateItem);
-router.delete('/:sid/:gid/:iid', stations.deleteItem);
+router.post('/:sid/:gid/', stations.item.createItem);
+router.put('/:sid/:gid/:iid', stations.item.updateItem);
+router.delete('/:sid/:gid/:iid', stations.item.deleteItem);
 
 module.exports = router;

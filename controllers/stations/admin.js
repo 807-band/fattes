@@ -5,7 +5,7 @@ const Station = require('../../models/Station');
  * Admin Operations
  */
 
-module.exports.create = async (req, res) => {
+ module.exports.create = async (req, res) => {
    const infoSection = [{
          id: shortid.generate(),
          role: "instructor",
@@ -61,6 +61,13 @@ module.exports.updateStation = async (req, res) => {
    } catch (err) {
       console.log(err);
    }
+}
+
+module.exports.updateStationOrder = async (req, res) => {
+   Station.update({"id": req.params.id}, {"order": req.body.order}, (err, results) => {
+      if (err) console.error(err);
+      else res.end();
+  });
 }
 
 module.exports.delete = async (req, res) => {

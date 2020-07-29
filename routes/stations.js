@@ -8,6 +8,7 @@ const stations = require("../controllers/stations");
 
 router.post('/', stations.admin.create);
 router.put('/:id', stations.admin.updateStation);
+router.put('/:id/order', stations.admin.updateStationOrder)
 router.delete('/:id', stations.admin.delete);
 
 /**
@@ -15,6 +16,7 @@ router.delete('/:id', stations.admin.delete);
  */
 
 router.get('/', stations.selector.getAll);
+router.get('/sorted', stations.selector.getAllSorted)
 router.get('/:id', stations.selector.getById);
 
 /**

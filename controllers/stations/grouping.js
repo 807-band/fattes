@@ -9,6 +9,7 @@ module.exports.createGrouping = async (req, res) => {
    const groupingInfo = {
       id: shortid.generate(), 
       title: req.body.title,
+      items: []
    };
    
    try {
@@ -58,6 +59,10 @@ module.exports.deleteGrouping = async (req, res) => {
 
       const group = station.groupings.findIndex(g => g.id === req.params.gid);
       if (group === -1) return res.jsonp({"error": "grouping not found"});
+
+      for(var i = group+1; i < station.groupings.length; i++) {
+         station.groupings[i].order = station.groupings[i].order - 1;
+      }
 
       delete station.groupings[group];
       await station.save((err, item) => {

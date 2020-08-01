@@ -34,7 +34,8 @@ const Station = require('../../models/Station');
       description: req.body.description,
       rank: req.body.rank,
       order: req.body.order,
-      information: infoSection
+      information: infoSection,
+      groupings: []
    };
 
    const newStation = new Station(stationInfo);

@@ -68,6 +68,10 @@ module.exports.deleteItem = async (req, res) => {
       const item = station.groupings[group].items.findIndex(item => item.id === req.params.iid);
       if (item === -1) return res.jsonp({"error": "item not found"});
 
+      for(var i = item+1; i < station.groupings[group].items.length; i++) {
+         station.groupings[group].items[i].order = station.groupings[group].items[i].order - 1;
+      }
+
       delete station.groupings[group].items[item];
       await station.save((err, item) => {
          if (err) console.log(err);
@@ -75,4 +79,5 @@ module.exports.deleteItem = async (req, res) => {
    } catch (err) {
       console.log(err);
    }
+   res.end();
 }

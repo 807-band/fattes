@@ -9,6 +9,7 @@ module.exports.createItem = async (req, res) => {
    const itemInfo = {
       id: shortid.generate(), 
       title: req.body.title,
+      isRequired: req.body.isRequired
    };
    
    try {
@@ -47,6 +48,7 @@ module.exports.updateItem = async (req, res) => {
          if (change === "isRequired") req.body[change] = (req.body[change] == 'true');
          station.groupings[group].items[item][change] = req.body[change];
       }
+
 
       await station.save((err, item) => {
          if (err) console.log(err);

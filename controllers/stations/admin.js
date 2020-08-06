@@ -51,7 +51,7 @@ module.exports.updateStation = async (req, res) => {
       if (station === undefined) return res.jsonp({"error": "station not found"});
 
       for (let item in req.body) {
-         if (item === "order") req.body[item] = Number(req.body[item]);
+         if (item === "order" || item === "maxFailed") req.body[item] = Number(req.body[item]);
          station[item] = req.body[item];
       }
 

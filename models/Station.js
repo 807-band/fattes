@@ -6,6 +6,7 @@ const StationSchema = new dynamoose.Schema({
    "description": String,
    "rank": String,
    "order": Number,
+   "maxFailed": Number,
    "groupings": {
       "type": Array,
       "schema": [{

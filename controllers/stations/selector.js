@@ -47,3 +47,15 @@ module.exports.getById = async (req, res) => {
       else res.jsonp(results[0]);
    });
 }
+
+/**
+ * Info selectors
+ */
+
+module.exports.getInformation = async (req, res) => {
+   Station.query("id").eq(req.params.id).exec((err, results) => {
+      if (err) console.log(err);
+      else if (results.length === 0) return res.jsonp({"error": "station not found"});
+      else res.jsonp(results[0].information);
+   });
+}

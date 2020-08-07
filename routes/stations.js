@@ -15,9 +15,13 @@ router.delete('/:id', stations.admin.delete);
  * Selectors
  */
 
+// stations
 router.get('/', stations.selector.getAll);
 router.get('/sorted', stations.selector.getAllSorted)
 router.get('/:id', stations.selector.getById);
+
+// info
+router.get('/:id/info', stations.selector.getInformation);
 
 /**
  * Information operations

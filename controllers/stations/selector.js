@@ -1,49 +1,44 @@
 const shortid = require("shortid");
-const Station = require('../../models/Station');
+const db = require("../../config/db");
 
 /**
  * Station selectors
  */
 
 module.exports.getAll = async (req, res) => {
-   try {
-      await Station.scan().exec(function(err, response) {
-         if (err) console.log(err);
-         else res.jsonp(response);
-      });
-   } catch (err) {
-      console.log(err);
-   }
-}
-
-module.exports.getAllSorted = async (req, res) => {
-   try {
-      await Station.scan().attributes(["id", "title", "order", "rank"]).exec(function(err, response) {
-         if (err) console.log(err);
-         else {
-            const beginnerStations = [], advancedStations = []
-            response.forEach((station) => {
-               if (station.rank == "beginner")
-                   beginnerStations.push(station);
-               else if (station.rank == "advanced")
-                   advancedStations.push(station);
-            });
-       
-            beginnerStations.sort((a, b) => (a.order > b.order) ? 1 : -1);
-            advancedStations.sort((a, b) => (a.order > b.order) ? 1 : -1);
-
-            res.jsonp({beginnerStations, advancedStations});
-         }
-      });
-   } catch(err) {
-      console.log(err);
-   }
+  db.execute(
+    'SELECT sID, title, class, level FROM Station ORDER BY class, level',
+    function(err, results, fields) {
+      if (err) console.log(err);
+      res.jsonp(results);
+    }
+  );
 }
 
 module.exports.getById = async (req, res) => {
-   Station.query("id").eq(req.params.id).exec((err, results) => {
-      if (err) console.log(err);
-      else if (results.length === 0) return res.jsonp({"error": "station not found"});
-      else res.jsonp(results[0]);
-   });
+  const promisePool = db.promise();
+  const sID = req.params.id;
+  let station, groups;
+
+  station = await promisePool.query('SELECT * FROM Station WHERE sID=?', [sID]);
+  station = JSON.stringify(station[0][0]);
+  station = JSON.parse(station);
+
+  groups = await promisePool.query('SELECT * FROM StationGroup WHERE StationID=?', [sID]);
+  groups = JSON.stringify(groups[0]);
+  groups = JSON.parse(groups);
+
+  groups = await Promise.all(groups.map(async g => {
+    const groupID = g.groupID;
+    delete(g.stationID);
+
+    let item = await promisePool.query('SELECT itemID, item, level, required FROM StationItem WHERE GroupID=?', [groupID]);
+    item = JSON.stringify(item[0]);
+    g.items = JSON.parse(item);
+
+    return g;
+  }));
+
+  station.groups = groups;
+  res.jsonp(station);
 }

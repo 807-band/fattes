@@ -47,7 +47,6 @@ module.exports.delete = async (req, res) => {
 
   let dStat = await promisePool.query('SELECT * FROM Station WHERE sID=?', [sID]);
   dStat = dStat[0][0];
-  console.log(dStat, dStat.class);
 
   db.promise().execute('UPDATE Station SET level = level - 1 ' +
     'WHERE class=? AND level>?', [dStat.class, dStat.level]).then(() => {

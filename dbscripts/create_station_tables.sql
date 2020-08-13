@@ -44,3 +44,11 @@ BEGIN
   SET NEW.level = (SELECT COUNT(sID) FROM Station WHERE `class`=NEW.class);
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER group_level BEFORE INSERT ON StationGroup
+FOR EACH ROW
+BEGIN
+  SET NEW.level = (SELECT COUNT(sID) FROM StationGroup WHERE stationID=NEW.stationID);
+END $$
+DELIMITER ;

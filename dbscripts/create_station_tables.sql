@@ -36,19 +36,3 @@ CREATE TABLE StationPacket(
 
   FOREIGN KEY (stationID) REFERENCES Station (sID)
 );
-
-DELIMITER $$
-CREATE TRIGGER station_level BEFORE INSERT ON Station
-FOR EACH ROW
-BEGIN
-  SET NEW.level = (SELECT COUNT(sID) FROM Station WHERE `class`=NEW.class);
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER group_level BEFORE INSERT ON StationGroup
-FOR EACH ROW
-BEGIN
-  SET NEW.level = (SELECT COUNT(sID) FROM StationGroup WHERE stationID=NEW.stationID);
-END $$
-DELIMITER ;

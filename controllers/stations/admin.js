@@ -1,4 +1,3 @@
-const shortid = require("shortid");
 const db = require("../../config/db");
 
 /**

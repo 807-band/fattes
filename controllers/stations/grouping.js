@@ -22,7 +22,7 @@ module.exports.updateGrouping = async (req, res) => {
   for (key in req.body) updates += key + "='" + req.body[key] + "', ";
   updates = updates.slice(0, -2);
 
-  let SQL = `UPDATE StationGroup SET ${updates} WHERE groupID=${gID}`;
+  const SQL = `UPDATE StationGroup SET ${updates} WHERE groupID=${gID}`;
   db.execute(SQL);
 
   res.end();

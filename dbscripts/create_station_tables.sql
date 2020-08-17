@@ -3,15 +3,15 @@ CREATE TABLE Station (
   title VARCHAR(60) NOT NULL,
   description VARCHAR(300),
   maxFailed INT DEFAULT 0,
-  `order` INT,
-  `rank` INT
+  level INT,
+  class INT
 );
 
 CREATE TABLE StationGroup (
   groupID INT AUTO_INCREMENT PRIMARY KEY,
   stationID INT NOT NULL,
   title VARCHAR(60),
-  `order` INT,
+  level INT,
 
   FOREIGN KEY (stationID) REFERENCES Station (sID)
 );
@@ -20,7 +20,7 @@ CREATE TABLE StationItem (
   itemID INT AUTO_INCREMENT PRIMARY KEY,
   groupID INT NOT NULL,
   item VARCHAR(90),
-  `order` INT,
+  level INT,
   required BOOLEAN,
 
   FOREIGN KEY (groupID) REFERENCES StationGroup (groupID)
@@ -31,8 +31,8 @@ CREATE TABLE StationPacket(
   stationID INT NOT NULL,
   role VARCHAR(20),
   info VARCHAR(20),
-  `text` VARCHAR(4000),
-  `order` INT,
+  content VARCHAR(4000),
+  level INT,
 
   FOREIGN KEY (stationID) REFERENCES Station (sID)
 );

@@ -1,85 +1,43 @@
-const shortid = require("shortid");
-const Station = require('../../models/Station');
+const db = require("../../config/db");
 
 /**
  * Item operations
  */
 
 module.exports.createItem = async (req, res) => {
-   const itemInfo = {
-      id: shortid.generate(), 
-      title: req.body.title,
-      isRequired: req.body.isRequired
-   };
-   
-   try {
-      let station = await Station.get(req.params.sid);
-      if (station === undefined) return res.jsonp({"error": "station not found"});
-
-      const group = station.groupings.findIndex(g => g.id === req.params.gid);
-      if (group === -1) return res.jsonp({"error": "grouping not found"});
-
-      if (station.groupings[group].items === undefined) station.groupings[group].items = [];
-      itemInfo.order = station.groupings[group].items.length;
-      station.groupings[group].items.push(itemInfo);
-
-      await station.save((err, item) => {
-         if (err) console.log(err);
-         res.jsonp(item);
-      });
-   } catch (err) {
-      console.log(err);
-   }
+  db.execute('INSERT INTO StationGroup (groupID, item, required) VALUES (?, ?, ?)',
+    [req.params.gid, req.body.title, req.body.isRequired],
+    function(err, results, fields) {
+      req.body.itemID = results.insertId;
+      res.jsonp(req.body);
+    }
+  );
 }
 
 module.exports.updateItem = async (req, res) => {
-   try {
-      let station = await Station.get(req.params.sid);
-      if (station === undefined) return res.jsonp({"error": "station not found"});
+  const itemID = req.params.iid;
+  let updates = "";
 
-      const group = station.groupings.findIndex(g => g.id === req.params.gid);
-      if (group === -1) return res.jsonp({"error": "grouping not found"});
+  // using ? notation is not ideal for variable length updates
+  for (key in req.body) updates += key + "='" + req.body[key] + "', ";
+  updates = updates.slice(0, -2);
 
-      const item = station.groupings[group].items.findIndex(item => item.id === req.params.iid);
-      if (item === -1) return res.jsonp({"error": "item not found"});
+  const SQL = `UPDATE StationItem SET ${updates} WHERE itemID=${itemID}`;
+  db.execute(SQL);
 
-      for (let change in req.body) {
-         if (change === "order") req.body[change] = Number(req.body[change]);
-         if (change === "isRequired") req.body[change] = (req.body[change] == 'true');
-         station.groupings[group].items[item][change] = req.body[change];
-      }
-
-
-      await station.save((err, item) => {
-         if (err) console.log(err);
-         res.jsonp(item);
-      });
-   } catch (err) {
-      console.log(err);
-   }
+  res.end();
 }
 
 module.exports.deleteItem = async (req, res) => {
-   try {
-      let station = await Station.get(req.params.sid);
-      if (station === undefined) return res.jsonp({"error": "station not found"});
+  const promisePool = db.promise();
+  const itemID = req.params.iid;
 
-      const group = station.groupings.findIndex(g => g.id === req.params.gid);
-      if (group === -1) return res.jsonp({"error": "grouping not found"});
+  let dStat = await promisePool.query('SELECT * FROM StationItem WHERE itemID=?', [itemID]);
+  dStat = dStat[0][0];
 
-      const item = station.groupings[group].items.findIndex(item => item.id === req.params.iid);
-      if (item === -1) return res.jsonp({"error": "item not found"});
-
-      for(var i = item+1; i < station.groupings[group].items.length; i++) {
-         station.groupings[group].items[i].order = station.groupings[group].items[i].order - 1;
-      }
-
-      delete station.groupings[group].items[item];
-      await station.save((err, item) => {
-         if (err) console.log(err);
-      });
-   } catch (err) {
-      console.log(err);
-   }
-   res.end();
+  db.promise().execute('UPDATE StationItem SET level = level - 1 ' +
+    'WHERE groupID=? AND level>?', [dStat.groupID, dStat.level]).then(() => {
+      db.execute('DELETE FROM StationItem WHERE itemID=?', [itemID]);
+    });
+  res.end();
 }

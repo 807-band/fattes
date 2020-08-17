@@ -17,7 +17,6 @@ router.delete('/:id', stations.admin.delete);
 
 // stations
 router.get('/', stations.selector.getAll);
-router.get('/sorted', stations.selector.getAllSorted)
 router.get('/:id', stations.selector.getById);
 
 // info

@@ -6,7 +6,8 @@ const cors = require('cors');
 
 const router = express.Router();
 
-const connectToDB = require('./config/db.js');
+const db = require('./config/db.js');
+var port = process.env.PORT || 3001;
 
 const stationRoutes = require('./routes/stations.js');
 
@@ -14,9 +15,6 @@ router.get('/', (req, res) => {
    res.sendFile(path.join(__dirname+'/frontend/index.html'));
 });
 
-var port = process.env.PORT || 3001;
-
-connectToDB();
 
 app.use(cors({ origin: true, credentials: true }));
 

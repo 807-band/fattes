@@ -5,9 +5,11 @@ const db = require("../../config/db");
  */
 
 module.exports.createItem = async (req, res) => {
-  db.execute('INSERT INTO StationGroup (groupID, item, required) VALUES (?, ?, ?)',
+  console.log(req.params.gid, req.body.title, req.body.isRequired);
+  db.execute('INSERT INTO StationItem (groupID, item, required) VALUES (?, ?, ?)',
     [req.params.gid, req.body.title, req.body.isRequired],
     function(err, results, fields) {
+      console.log(err);
       req.body.itemID = results.insertId;
       res.jsonp(req.body);
     }

@@ -48,9 +48,11 @@ module.exports.getById = async (req, res) => {
  */
 
 module.exports.getInformation = async (req, res) => {
-   Station.query("id").eq(req.params.id).exec((err, results) => {
-      if (err) console.log(err);
-      else if (results.length === 0) return res.jsonp({"error": "station not found"});
-      else res.jsonp(results[0].information);
-   });
+   db.execute(
+      'SELECT * FROM StationPacket WHERE stationID=? ORDER BY level', [req.params.id],
+      function(err, results, fields) {
+        if (err) console.log(err);
+        res.jsonp(results);
+      }
+    );
 }

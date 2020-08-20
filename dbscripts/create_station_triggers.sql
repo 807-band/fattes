@@ -31,4 +31,14 @@ BEGIN
   INSERT INTO StationItem (groupID, item) VALUES (NEW.groupID, 'example item');
 END $$
 
+/* create default instructor/evaluator script/setup */
+CREATE TRIGGER auto_create_packet AFTER INSERT ON Station
+FOR EACH ROW
+BEGIN
+   INSERT INTO StationPacket (stationID, role, info, content) VALUES (NEW.sID, 'instructor', 'setup', '');
+   INSERT INTO StationPacket (stationID, role, info, content) VALUES (NEW.sID, 'instructor', 'script', '');
+   INSERT INTO StationPacket (stationID, role, info, content) VALUES (NEW.sID, 'evaluator', 'setup', '');
+   INSERT INTO StationPacket (stationID, role, info, content) VALUES (NEW.sID, 'evaluator', 'script', '');
+END $$
+
 DELIMITER ;

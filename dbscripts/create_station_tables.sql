@@ -36,3 +36,17 @@ CREATE TABLE StationPacket(
 
   FOREIGN KEY (stationID) REFERENCES Station (sID)
 );
+
+-- backwards compatible updates
+ALTER TABLE StationGroup DROP FOREIGN KEY stationgroup_ibfk_1;
+ALTER TABLE StationItem DROP FOREIGN KEY stationitem_ibfk_1;
+ALTER TABLE StationPacket DROP FOREIGN KEY stationpacket_ibfk_1;
+
+ALTER TABLE StationGroup ADD CONSTRAINT FK_Station
+  FOREIGN KEY (stationID) REFERENCES Station (sID) ON DELETE CASCADE;
+
+ALTER TABLE StationItem ADD CONSTRAINT FK_StationGroup
+  FOREIGN KEY (groupID) REFERENCES StationGroup (groupID) ON DELETE CASCADE;
+
+ALTER TABLE StationPacket ADD CONSTRAINT FK_sID_packet
+  FOREIGN KEY (stationID) REFERENCES Station (sID) ON DELETE CASCADE;

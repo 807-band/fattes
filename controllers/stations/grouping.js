@@ -32,9 +32,6 @@ module.exports.deleteGrouping = async (req, res) => {
   const promisePool = db.promise();
   const gID = req.params.gid;
 
-  //TODO: this won't be necessary once cascade delete is implemented
-  await promisePool.execute('DELETE FROM StationItem WHERE groupID=?', [gID]);
-
   let dStat = await promisePool.query('SELECT * FROM StationGroup WHERE groupID=?', [gID]);
   dStat = dStat[0][0];
 

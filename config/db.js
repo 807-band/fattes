@@ -1,18 +1,14 @@
-const dynamoose = require('dynamoose');
+require('dotenv').config();
+const mysql = require('mysql2');
 
-const db = new dynamoose.aws.sdk.DynamoDB({
-   "accessKeyId": process.env.AWS_ACCESS_KEY_ID,
-   "secretAccessKey": process.env.AWS_SECRET_ACCESS_KEY,
-   "region": process.env.AWS_REGION
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: '807web',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-const connectToDB = async () => {
-   try {
-      dynamoose.aws.ddb.set(db);
-      console.log("Connected to DynamoDB");
-   } catch (err) {
-      console.log(err);
-   }
-};
-
-module.exports = connectToDB;
+module.exports = db;

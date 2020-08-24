@@ -7,6 +7,13 @@ const users = require("../controllers/users");
  */
 
 router.get('/', users.selector.getAll);
-router.get('/sections', users.selector.getAllSections);
+router.get('/:id', users.selector.getById);
+
+/**
+ * Admin Operations
+ */
+
+router.post('/', users.admin.create);
+router.delete('/:id', users.admin.delete);
 
 module.exports = router;

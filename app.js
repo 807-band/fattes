@@ -11,6 +11,7 @@ var port = process.env.PORT || 3001;
 
 const stationRoutes = require('./routes/stations.js');
 const userRoutes = require('./routes/users.js');
+const sectionRoutes = require('./routes/sections.js');
 
 router.get('/', (req, res) => {
    res.sendFile(path.join(__dirname+'/frontend/index.html'));
@@ -24,4 +25,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 app.use('/api/station/', stationRoutes);
 app.use('/api/user/', userRoutes);
+app.use('/api/section/', sectionRoutes);
 app.listen(port, () => console.log(`Server running on port ${port}`));

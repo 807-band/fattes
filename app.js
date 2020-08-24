@@ -11,11 +11,7 @@ var port = process.env.PORT || 3001;
 
 const stationRoutes = require('./routes/stations.js');
 const userRoutes = require('./routes/users.js');
-
-router.get('/', (req, res) => {
-   res.sendFile(path.join(__dirname+'/frontend/index.html'));
-});
-
+const evalRoutes = require('./routes/evaluations.js');
 
 app.use(cors({ origin: true, credentials: true }));
 
@@ -24,4 +20,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 app.use('/api/station/', stationRoutes);
 app.use('/api/user/', userRoutes);
+app.use('/api/evaluations/', evalRoutes);
 app.listen(port, () => console.log(`Server running on port ${port}`));

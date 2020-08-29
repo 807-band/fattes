@@ -9,4 +9,6 @@ const evaluations = require("../controllers/evaluations");
 router.get('/u/:userid', evaluations.user.progress);
 router.get('/u/:userid/next', evaluations.user.next);
 
+router.get('/admin', evaluations.admin.all);
+
 module.exports = router;

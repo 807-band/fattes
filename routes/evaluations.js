@@ -13,7 +13,7 @@ router.get('/u/:userid/next', evaluations.user.next);
  * Admin Operators
  */
 
-router.post('/:userid/:stationid', evaluations.admin.submit);
+router.post('/:userid/:stationid', evaluations.evaluator.submit);
 router.get('/admin', evaluations.admin.all);
 
 module.exports = router;

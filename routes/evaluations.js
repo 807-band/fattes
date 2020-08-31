@@ -9,4 +9,10 @@ const evaluations = require("../controllers/evaluations");
 router.get('/u/:userid', evaluations.user.progress);
 router.get('/u/:userid/next', evaluations.user.next);
 
+/**
+ * Admin Operators
+ */
+
+router.post('/:userid/:stationid', evaluations.admin.submit);
+
 module.exports = router;

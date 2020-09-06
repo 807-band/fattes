@@ -16,4 +16,12 @@ router.get('/:id', users.selector.getById);
 router.post('/', users.admin.create);
 router.delete('/:id', users.admin.delete);
 
+/**
+ * Auth Operations
+ */
+
+router.post('/login', users.auth.login);
+router.get('/auth/logout', users.auth.logout);
+
+
 module.exports = router;

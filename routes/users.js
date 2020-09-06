@@ -8,6 +8,7 @@ const users = require("../controllers/users");
 
 router.get('/', users.selector.getAll);
 router.get('/:id', users.selector.getById);
+router.get('/:id/permissions', users.selector.getPermissions);
 
 /**
  * Admin Operations

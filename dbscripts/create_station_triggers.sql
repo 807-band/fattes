@@ -41,4 +41,10 @@ BEGIN
    INSERT INTO StationPacket (stationID, role, info, content) VALUES (NEW.sID, 'evaluator', 'script', '');
 END $$
 
+CREATE TRIGGER packet_level BEFORE INSERT ON StationPacket
+FOR EACH ROW
+BEGIN
+  SET NEW.level = (SELECT COUNT(packetID) FROM StationPacket WHERE stationID=NEW.stationID);
+END $$
+
 DELIMITER ;

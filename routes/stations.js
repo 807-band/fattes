@@ -27,6 +27,7 @@ router.get('/:id/info', stations.selector.getInformation);
  */
 
 router.put('/:sid/info/:iid', stations.info.updateInfo);
+router.post('/:sid/info/:role/:info', stations.info.addInfoCard);
 
 /**
  * Grouping operations

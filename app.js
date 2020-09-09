@@ -5,6 +5,7 @@ const app = express();
 const path = require('path');
 var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -20,7 +21,8 @@ passport.use(new LocalStrategy(
       if (!results[0][0]) {
          return done(null, false, { message: 'incorrectUsername' });
       }
-      if (!(password === results[0][0].password)) {
+      const match = await bcrypt.compare(password, results[0][0].password);
+      if (!match) {
          return done(null, false, { message: 'incorrectPassword' });
       }
       return done(null, results[0][0]);

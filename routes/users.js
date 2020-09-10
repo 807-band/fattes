@@ -23,6 +23,7 @@ router.delete('/:id', users.admin.delete);
 
 router.post('/login', users.auth.login);
 router.get('/auth/logout', users.auth.logout);
+router.post('/password', users.auth.updatePassword);
 
 
 module.exports = router;
